@@ -7,7 +7,7 @@ from bottle import get, post, request, template, redirect
 ON_PYTHONANYWHERE = "PYTHONANYWHERE_DOMAIN" in os.environ.keys()
 
 if ON_PYTHONANYWHERE:
-    from bottle import default_app 
+    from bottle import default_app
 else:
     from bottle import run, debug
 
