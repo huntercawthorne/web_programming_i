@@ -69,7 +69,6 @@ def post_update_item():
     cursor.close()
     redirect('/')
 
-
 @get('/delete_item/<id:int>')
 def get_delete_item(id):
     print("we want to delete #" + str(id))
@@ -85,5 +84,4 @@ if ON_PYTHONANYWHERE:
 else:
     debug(True)
     run(host="localhost", port=8080)
-
 
