@@ -95,13 +95,12 @@ first_visit = {
 
 @get("/visit")
 def get_visit():
-    key="secret"
-    visit_counter = int(request.get_cookie("visit_counter", '0'))
-    user_id = request.cookies.get("user_id", str(random.randint(1000000000, 2000000000)))
+    visit_counter = int(request.cookies.get("visit_counter",'0'))
+    user_id = request.cookies.get("user_id",str(random.randint(1000000000,2000000000)))
     visit_counter = visit_counter + 1
-    response.set_cookie("visit_counter", str(visit_counter))
-    response.set_cookie("user_id", user_id, max_age=300, httponly = True, secure=True)
-    last_visit = visit_times.get(user_id, "never")
+    response.set_cookie("visit_counter",str(visit_counter))
+    response.set_cookie("user_id",user_id)
+    last_visit = visit_times.get(user_id,"never")
     visit_times[user_id] = str(datetime.datetime.now())
     if last_visit == "never":
         first_visit[user_id] = visit_times[user_id]
