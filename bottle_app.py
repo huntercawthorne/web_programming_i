@@ -1,4 +1,5 @@
 import datetime
+import time
 import os
 import random
 import sqlite3
@@ -21,67 +22,77 @@ random.seed()
 
 @get('/')
 def get_show_list():
-    session_id = request.cookies.get("session_id", str(uuid.uuid4()))
-    result = db.search(query.session_id == session_id)
-    if len(result) == 0:
-        username = "Unknown"
-        pass
+
+    # ask for cookie, if we don't have one start a guest session
+    session_id = request.cookies.get("session_id",None)
+    if session_id == None:
+        session_id = str(uuid.uuid4())
+        session = {'session_id':session_id, "username":"Guest", "time":int(time.time())}
+        db.insert(session)
+        response.set_cookie("session_id",session_id)
+    # had a cookie with an id, look up the session
     else:
-        session = result[0]
-        if "username" in session:
-            username = session['username']
+        result = db.search(query.session_id == session_id)
+        # the session isn't found, start a new one
+        if len(result) == 0:
+            session_id = str(uuid.uuid4())
+            session = {'session_id':session_id, "username":"Guest", "time":int(time.time())}
+            db.insert(session)
+            response.set_cookie("session_id",session_id)
+        # the session is found, use it
         else:
-            username = "Unknown, but has a cookie..."
-    response.set_cookie("session_id",session_id)
+            session=result[0]
+
     connection = sqlite3.connect("todo.db")
     cursor = connection.cursor()
     cursor.execute("select * from todo")
     result = cursor.fetchall()
     cursor.close()
-    return template("show_list", rows=result, username=username)
+    return template("show_list", rows=result, session={})
 
 @get('/sandbox')
 def get_sandbox():
     return template("sandbox")
 
-
 @get('/login')
 def get_login():
-    return template("login", csrf_token="abcrefioawejflkaklhsaf")
+    return template("login", csrf_token="abcrsrerredadfa")
 
 @post('/login')
 def post_login():
     csrf_token = request.forms.get("csrf_token").strip()
-    if csrf_token != "abcrefioawejflkaklhsaf":
+    if csrf_token != "abcrsrerredadfa":
         redirect('/login_error')
+        return
     username = request.forms.get("username").strip()
     password = request.forms.get("password").strip()
     if password != "password":
         redirect('/login_error')
-    session_id = request.cookies.get("session_id", str(uuid.uuid4()))
+        return
+    session_id = request.cookies.get("session_id",str(uuid.uuid4()))
     result = db.search(query.session_id == session_id)
     if len(result) == 0:
         db.insert({'session_id':session_id, 'username':username})
     else:
         session = result[0]
-        db.update({'username':username}, query.session_id == session_id)
+        db.update({'username':username},query.session_id == session_id)
+    response.set_cookie("session_id",session_id)
+    redirect('/')
+
+@get('/logout')
+def get_logout():
+    session_id = request.cookies.get("session_id",str(uuid.uuid4()))
+    result = db.search(query.session_id == session_id)
+    if len(result) == 0:
+        db.insert({'session_id':session_id, 'username':"Unknown"})
+    else:
+        db.update({'username':"Unknown"},query.session_id == session_id)
     response.set_cookie("session_id",session_id)
     redirect('/')
 
 @get('/login_error')
 def get_login_error():
     return template("login_error")
-
-@get('/logout')
-def get_logout():
-    session_id = request.cookies.get("session_id", str(uuid.uuid4()))
-    result = db.search(query.session_id == session_id)
-    if len(result) == 0:
-        db.insert({'session_id':session_id, 'username':"Unknown"})
-    else:
-        db.update({'username':"Unknown"}, query.session_id == session_id)
-    response.set_cookie("session_id",session_id)
-    redirect('/')
 
 @get('/set_status/<id:int>/<value:int>')
 def get_set_status(id, value):
@@ -142,13 +153,14 @@ def get_delete_item(id):
 
 @get("/picture")
 def get_picture():
+    # picture from here: https://editor.p5js.org/p5/sketches/Hello_P5:_animate
     # p5js.org
     return template("picture")
 
 
 @get("/visit")
 def get_visit():
-    session_id = request.cookies.get("session_id", str(uuid.uuid4()))
+    session_id = request.cookies.get("session_id",str(uuid.uuid4()))
     result = db.search(query.session_id == session_id)
     if len(result) == 0:
         db.insert({'session_id':session_id, 'visit_count':1})
@@ -156,9 +168,9 @@ def get_visit():
     else:
         session = result[0]
         visit_count = session['visit_count'] + 1
-        db.update({'visit_count':visit_count}, query.session_id == session_id)
+        db.update({'visit_count':visit_count},query.session_id == session_id)
     response.set_cookie("session_id",session_id)
-    return(f"Welcome, session_id #{session_id}. Visit #{visit_count}")
+    return(f"Welcome, session_id #{session_id}. Visit# {visit_count}.")
 
 if ON_PYTHONANYWHERE:
     application = default_app()
