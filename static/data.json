@@ -1,9 +1,5 @@
 [
-    {"fruit":"Apple"},
-    {"fruit":"Orange"},
-    {"fruit":"Banana"}
-<<<<<<< HEAD
+    {"id" : 1, "task": "do something interesting", "status":false },
+    {"id" : 2, "task": "do something enjoyable", "status":false },
+    {"id" : 3, "task": "do something useful", "status":false }
 ]
-=======
-]
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5
