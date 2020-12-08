@@ -1,6 +1,6 @@
+# A very simple Bottle Hello World app for you to get started with...
 import datetime
 import time
-<<<<<<< HEAD
 import os
 import random
 import sqlite3
@@ -11,117 +11,18 @@ db = TinyDB("sessions.json")
 query = Query()
 
 from bottle import get, post, request, response, template, redirect
-=======
-import uuid
-import dataset
 
-db = dataset.connect('sqlite:///todo.db')
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5
+ON_PYTHONANYWHERE = "PYTHONANYWHERE_DOMAIN" in os.environ.keys()
 
-from bottle import get, post, request, response, template, redirect, default_app
-
-<<<<<<< HEAD
 if ON_PYTHONANYWHERE:
     from bottle import default_app
 else:
     from bottle import run, debug
-=======
-def get_session(request, response):
-    session_id = request.cookies.get("session_id",None)
-    if session_id == None:
-        session_id = str(uuid.uuid4())
-        session = { 'session_id':session_id, "username":"Guest", "time":int(time.time()) }
-        db['session'].insert(session)
-        response.set_cookie("session_id",session_id)
-    else:
-        session=db['session'].find_one(session_id=session_id)
-        if session == None:
-            session_id = str(uuid.uuid4())
-            session = { 'session_id':session_id, "username":"Guest", "time":int(time.time()) }
-            db['session'].insert(session)
-            response.set_cookie("session_id",session_id)
-
-            # session = {"message":"no session found with the id =" + session_id}
-    return session
-
-def save_session(session):
-    db['session'].update(session,['session_id'])
-
-@get('/login')
-def get_login():
-    session = get_session(request, response)
-    if session['username'] != 'Guest':
-        redirect('/')
-        return
-    return template("login", csrf_token="abcrsrerredadfa")
-
-@post('/login')
-def post_login():
-    session = get_session(request, response)
-    if session['username'] != 'Guest':
-        redirect('/')
-        return
-    # csrf_token = request.forms.get("csrf_token").strip()
-    # if csrf_token != "abcrsrerredadfa":
-    #     redirect('/login_error')
-    #     return
-    username = request.forms.get("username").strip()
-    password = request.forms.get("password").strip()
-    profile = db['profile'].find_one(username=username)
-    if profile == None:
-        redirect('/login_error')
-        return
-    if password != profile["password"]:
-        redirect('/login_error')
-        return
-    session['username'] = username
-    save_session(session)
-    redirect('/')
-
-
-@get('/logout')
-def get_logout():
-    session = get_session(request, response)
-    session['username'] = 'Guest'
-    save_session(session)
-    redirect('/login')
-
-@get('/register')
-def get_register():
-    session = get_session(request, response)
-    if session['username'] != 'Guest':
-        redirect('/')
-        return
-    return template("register", csrf_token="abcrsrerredadfa")
-
-@post('/register')
-def post_register():
-    session = get_session(request, response)
-    if session['username'] != 'Guest':
-        redirect('/')
-        return
-    # csrf_token = request.forms.get("csrf_token").strip()
-    # if csrf_token != "abcrsrerredadfa":
-    #     redirect('/login_error')
-    #     return
-    username = request.forms.get("username").strip()
-    password = request.forms.get("password").strip()
-    if len(password) < 8:
-        redirect('/login_error')
-        return
-    profile = db['profile'].find_one(username=username)
-    if profile:
-        redirect('/login_error')
-        return
-    db['profile'].insert({'username':username, 'password':password})
-    redirect('/')
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5
 
 random.seed()
 
 @get('/')
 def get_show_list():
-<<<<<<< HEAD
 
     # ask for cookie, if we don't have one start a guest session
     session_id = request.cookies.get("session_id",None)
@@ -209,80 +110,24 @@ def get_set_status(id, value):
     cursor.execute("update todo set status=? where id=?", (value, id,))
     connection.commit()
     cursor.close()
-=======
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    result = db['todo'].all()
-    result=[dict(r) for r in result]
-    return template("show_list", rows=result, session=session)
-
-
-@get('/update_status/<id:int>/<value:int>')
-def get_update_status(id, value):
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    #result = db['todo'].find_one(id=id)
-    db['todo'].update({'id':id, 'status':(value!=0)},['id'])
-    redirect('/')
-
-
-@get('/delete_item/<id:int>')
-def get_delete_item(id):
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    db['todo'].delete(id=id)
-    redirect('/')
-
-
-@get('/update_task/<id:int>')
-def get_update_task(id):
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    result = db['todo'].find_one(id=id)
-    return template("update_task", row=result)
-
-
-@post('/update_task')
-def post_update_task():
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    id = int(request.forms.get("id").strip())
-    updated_task = request.forms.get("updated_task").strip()
-    db['todo'].update({'id':id, 'task':updated_task},['id'])
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5
     redirect('/')
 
 
 @get('/new_item')
 def get_new_item():
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
     return template("new_item")
 
 
 @post('/new_item')
 def post_new_item():
-    session = get_session(request, response)
-    if session['username'] == 'Guest':
-        redirect('/login')
-        return
-    new_task = request.forms.get("new_task").strip()
-    db['todo'].insert({'task':new_task, 'status':False})
+    new_item = request.forms.get("new_item").strip()
+    connection = sqlite3.connect("todo.db")
+    cursor = connection.cursor()
+    cursor.execute("insert into todo (task, status) values (?,?)", (new_item, 1))
+    connection.commit()
+    cursor.close()
     redirect('/')
 
-<<<<<<< HEAD
 
 @get('/update_item/<id:int>')
 def get_update_item(id):
@@ -342,12 +187,4 @@ else:
     debug(True)
     run(host="localhost", port=8080)
 
-=======
 
-application = default_app()
-
-
-if __name__ == "__main__":
-    #print(get_show_list())
-    get_update_task(6)
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5

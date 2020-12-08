@@ -1,19 +1,5 @@
 <html>
 <head>
-<<<<<<< HEAD
-    <title>Sandbox Page</title>
-    <script>
-    x = 0;
-    function onCountClicksClick() {
-        x = x + 1;
-        document.getElementById("my_text").innerHTML = "I have been clicked " + x + " times.";
-    };
-    function onShowSpecialSectionClick() {
-        x = x + 1;
-        document.getElementById("special_section").hidden=false;
-    };
-    </script>
-=======
   <title>Sandbox Page</title>
   <script>
   x = 0;
@@ -26,7 +12,6 @@
     document.getElementById("special_section").hidden=false;
   };
   </script>
->>>>>>> 21696687a61c2083725d5abb03db46140a5e20f5
 </head>
 <body>
 Hello from the sandbox.
