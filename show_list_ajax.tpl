@@ -1,3 +1,4 @@
+  
 <html>
 <head>
   <title>Todo List 0.001</title>
@@ -6,7 +7,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
   $(document).ready(function() {
-    $.getJSON("http://dev-web-drdelozier.pythonanywhere.com/get_tasks", function(rows) {
+    $.getJSON("http://dev-web-hcawthor.pythonanywhere.com/get_tasks", function(rows) {
         $("#content").append("<table class=\"w3-table w3-bordered w3-border>\"");
         $.each(rows, function(i, row) {
             $("#content").append("<tr>");
