@@ -25,6 +25,9 @@
         <td>
             <a href="/delete_item/{{row['id']}}"><i class="material-icons">delete</i></a>
         </td>
+        <td>
+            Added by: {{session['username']}}
+        </td>
     </tr>
 %end
 </table>

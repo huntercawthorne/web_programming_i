@@ -1,4 +1,4 @@
-  
+
 <html>
 <head>
   <title>Todo List 0.001</title>
@@ -20,6 +20,7 @@
                     $("#content").append("<td><a href=\"/update_status/\"" + row["id"] + "/1><i class=\"material-icons\">check_box_outline_blank</i></a></td>");
                 }
                 $("#content").append("<td><a href=\"/delete_item/\"" + row["id"] + "><i class=\"material-icons\">delete</i></a></td>");
+                $("#content").append("<td>" + "Added by: " + "{{session['username']}}" + "</td>");
             $("#content").append("</tr>");
         });
         $("#content").append("</table>");
