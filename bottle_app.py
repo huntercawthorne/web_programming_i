@@ -60,6 +60,13 @@ def post_login():
     save_session(session)
     redirect('/')
 
+@get('/forgot_password')
+def get_forgot_password():
+    session = get_session(request, response)
+    if session['username'] != 'Guest':
+        redirect('/')
+        return
+    return template("forgot_password", csrf_token="abcrsrerredadfa")
 
 @get('/logout')
 def get_logout():
