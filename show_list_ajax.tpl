@@ -1,7 +1,7 @@
 
 <html>
 <head>
-  <title>Todo List 0.001</title>
+  <title>To-do List Final</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
   <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
