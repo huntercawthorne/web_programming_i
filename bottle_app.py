@@ -68,6 +68,25 @@ def get_forgot_password():
         return
     return template("forgot_password", csrf_token="abcrsrerredadfa")
 
+@post('/forgot_password')
+def post_forgot_password():
+    session = get_session(request, response)
+    if session['username'] != 'Guest':
+        redirect('/')
+        return
+    username = request.forms.get("username").strip()
+    password = request.forms.get("password").strip()
+    if len(password) < 8:
+        redirect('/login_error')
+        return
+    profile = db['profile'].find_one(username=username)
+    data = dict(username=username, password=password)
+    if profile == None:
+        redirect('/login_error')
+        return
+    db['profile'].update(data, ['username'])
+    redirect('/')
+
 @get('/logout')
 def get_logout():
     session = get_session(request, response)

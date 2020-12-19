@@ -4,9 +4,11 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet" >
 </head>
+<div class="w3-blue-grey">
 <body>
 %include("header.tpl", session=session)
-<table class="w3-table w3-bordered w3-border">
+<div class="table">
+<table class="w3-table w3-bordered w3-border w3-grey">
 %for row in rows:
     <tr>
         <td>
@@ -31,6 +33,8 @@
     </tr>
 %end
 </table>
+</div>
 %include("footer.tpl", session=session)
 </body>
+</div>
 </html>
