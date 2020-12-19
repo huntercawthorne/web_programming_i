@@ -5,10 +5,16 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
   <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body {
+    background: #607d8b;
+    color: white;
+    }
+  </style>
   <script>
   $(document).ready(function() {
     $.getJSON("http://dev-web-hcawthor.pythonanywhere.com/get_tasks", function(rows) {
-        $("#content").append("<table class=\"w3-table w3-bordered w3-border>\"");
+        $("#content").append("<table class=\"w3-table w3-bordered w3-border w3-grey\">");
         $.each(rows, function(i, row) {
             $("#content").append("<tr>");
                 $("#content").append("<td><a href=\"/update_task/\"" + row["id"] + "><i class=\"material-icons\">edit</i></a></td>");
